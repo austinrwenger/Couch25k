@@ -213,7 +213,7 @@
     }
     .field { display: grid; gap: 7px; }
     .field label { color: var(--muted); font-size: 13px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
-    .field input, .field select, .edit-time, .edit-type {
+    .field input, .field select {
       width: 100%; min-height: 54px; padding: 0 14px; border: 1px solid var(--line); border-radius: 12px;
       background: #080809; color: white; font-size: 20px; font-weight: 850;
     }
@@ -224,21 +224,26 @@
     }
     .hint { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
 
-    #editDialog { width: min(900px, calc(100% - 32px)); }
-    .edit-list { display: grid; gap: 8px; max-height: 52vh; overflow: auto; padding: 4px 4px 4px 0; }
-    .edit-row {
-      display: grid; grid-template-columns: minmax(145px,1fr) 78px minmax(85px,.65fr) 78px 58px 58px;
-      align-items: center; gap: 8px; padding: 9px; border: 1px solid var(--line); border-radius: 13px; background: #0a0a0b;
+    #editDialog { width: min(820px, calc(100% - 32px)); }
+    .pattern-card {
+      display: grid; grid-template-columns: minmax(0,1fr) minmax(150px,.42fr); align-items: center; gap: 18px;
+      margin: 18px 0; padding: 16px 18px; border: 1px solid rgba(255,38,56,.4); border-radius: 15px;
+      background: rgba(255,38,56,.09);
     }
-    .edit-type { min-height: 48px; font-size: 16px; }
-    .edit-time { min-height: 48px; text-align: center; font-variant-numeric: tabular-nums; font-size: 18px; }
-    .step-button, .row-button {
-      min-height: 48px; border: 1px solid var(--line); border-radius: 11px; background: #202022; color: white;
-      font-weight: 900; cursor: pointer;
+    .pattern-card strong { display: block; font-size: 18px; }
+    .pattern-card span { display: block; margin-top: 4px; color: var(--muted); font-size: 14px; }
+    .pattern-card input { width: 100%; min-height: 52px; padding: 0 14px; border: 1px solid var(--line); border-radius: 12px; background: #080809; color: white; font-size: 20px; font-weight: 900; }
+    .edit-list { display: grid; gap: 9px; max-height: 49vh; overflow: auto; padding: 4px 4px 4px 0; }
+    .group-row {
+      display: grid; grid-template-columns: 12px minmax(0,1fr) 84px minmax(95px,.45fr) 84px;
+      align-items: center; gap: 10px; padding: 13px; border: 1px solid var(--line); border-radius: 14px; background: #0a0a0b;
     }
-    .row-button { font-size: 22px; }
-    .row-button.delete { color: #ff6977; }
-    .add-interval { width: 100%; min-height: 52px; margin-top: 10px; border: 1px dashed #777; border-radius: 12px; background: transparent; color: white; font-weight: 850; cursor: pointer; }
+    .group-dot { width: 10px; height: 38px; border-radius: 999px; background: var(--group-color); }
+    .group-label strong { display: block; font-size: 17px; }
+    .group-label small { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+    .group-time { width: 100%; min-height: 50px; padding: 0 10px; border: 1px solid var(--line); border-radius: 11px; background: #080809; color: white; text-align: center; font-variant-numeric: tabular-nums; font-size: 18px; font-weight: 900; }
+    .step-button { min-height: 50px; border: 1px solid var(--line); border-radius: 11px; background: #202022; color: white; font-weight: 900; cursor: pointer; }
+    .fixed-pattern-note { margin: 14px 0; padding: 12px 14px; border-left: 4px solid var(--run); background: #181819; color: var(--muted); line-height: 1.45; }
 
     .countdown-flash { animation: flash .38s ease; }
     @keyframes flash { 45% { filter: brightness(1.35); } }
@@ -254,12 +259,13 @@
       .timer-card { min-height: 620px; }
       .plan-card { min-height: 540px; }
       .builder-grid { grid-template-columns: 1fr; }
-      .edit-row { grid-template-columns: 1fr 65px 82px 65px 52px 52px; }
+      .group-row { grid-template-columns: 10px 1fr 70px 90px 70px; }
     }
 
     @media (max-width: 600px) {
-      .edit-row { grid-template-columns: 1fr 1fr 1fr; }
-      .edit-type, .edit-time { grid-column: span 3; }
+      .pattern-card { grid-template-columns: 1fr; }
+      .group-row { grid-template-columns: 10px 1fr 1fr; }
+      .group-label { grid-column: span 2; }
     }
 
     @media (max-height: 720px) and (min-width: 861px) {
@@ -345,7 +351,7 @@
 
         <div class="footer-tools">
           <button id="resetButton" class="small-button danger">↺ Reset session</button>
-          <button id="editButton" class="small-button edit">✎ Edit intervals</button>
+          <button id="editButton" class="small-button edit">✎ Edit workout</button>
           <button id="wakeButton" class="small-button">☀ Keep screen awake</button>
         </div>
       </aside>
@@ -365,7 +371,7 @@
       <li><kbd>R</kbd> reset the session</li>
       <li><kbd>C</kbd> build a custom workout</li>
     </ul>
-    <p>Use <strong>Edit intervals</strong> to adjust the workout currently on screen. Choosing a Week or Run again restores the original Couch-to-5K preset.</p>
+    <p>Use <strong>Edit workout</strong> to adjust matching timing groups together while keeping the Couch-to-5K sequence. Choosing a Week or Run again restores the original preset.</p>
     <p>The plan uses a 5-minute warm-up walk and 5-minute cool-down walk. Run means an easy, sustainable pace—not a sprint. Take a rest day between sessions, adapt for individual needs, and stop if something does not feel right.</p>
     <div class="dialog-actions"><button id="closeInfo" class="control-button primary">Got it</button></div>
   </dialog>
@@ -405,9 +411,19 @@
 
   <dialog id="editDialog">
     <h2>Edit This Workout</h2>
-    <p>Change any interval by 15 seconds, type an exact time, duplicate it, or remove it. Your original Couch-to-5K preset stays available in the Week and Run menus.</p>
+    <p>Adjust matching steps together while preserving this Couch-to-5K workout’s exact order. Different-length runs and walks remain separate timing groups.</p>
+    <div id="patternCard" class="pattern-card">
+      <div>
+        <strong id="patternName">Run/Walk Pattern</strong>
+        <span id="patternHelp">Walk intervals stay between run intervals.</span>
+      </div>
+      <div class="field">
+        <label id="patternCountLabel" for="patternCount">Run intervals</label>
+        <input id="patternCount" type="number" inputmode="numeric" min="1" max="20" value="8">
+      </div>
+    </div>
+    <div id="fixedPatternNote" class="fixed-pattern-note" hidden>This workout has a fixed Couch-to-5K sequence. Change its timing groups below, or use Custom Workout to build a different structure.</div>
     <div id="editRows" class="edit-list"></div>
-    <button id="addIntervalButton" class="add-interval">＋ Add an interval</button>
     <div class="dialog-actions">
       <button id="cancelEdit" class="dialog-button">Cancel</button>
       <button id="applyEdit" class="dialog-button apply">Apply changes</button>
@@ -443,6 +459,80 @@
       9: [1,2,3].map(() => session([run(1800)]))
     };
 
+    function getPresetEditSchema(week, day) {
+      const wrap = details => ({
+        ...details,
+        groups: [
+          { key: 'warm', type: 'warm', label: 'Warm-up Walk', seconds: 300 },
+          ...details.groups,
+          { key: 'cool', type: 'cool', label: 'Cool-down Walk', seconds: 300 }
+        ]
+      });
+
+      if (week === 1) return wrap({ kind: 'simple', count: 8, countLabel: 'Run intervals', patternName: 'Run/Walk Pattern', patternHelp: 'A Walk follows every Run except the final Run.', groups: [
+        { key: 'run', type: 'run', label: 'Run', seconds: 60 }, { key: 'walk', type: 'walk', label: 'Walk', seconds: 90 }
+      ]});
+      if (week === 2) return wrap({ kind: 'simple', count: 6, countLabel: 'Run intervals', patternName: 'Run/Walk Pattern', patternHelp: 'A Walk follows every Run except the final Run.', groups: [
+        { key: 'run', type: 'run', label: 'Run', seconds: 90 }, { key: 'walk', type: 'walk', label: 'Walk', seconds: 120 }
+      ]});
+      if (week === 3) return wrap({ kind: 'ladder', count: 2, countLabel: 'Ladder sets', patternName: 'Short + Long Ladder', patternHelp: 'Each set is Short Run → Short Walk → Long Run. A long recovery separates sets.', groups: [
+        { key: 'shortRun', type: 'run', label: 'Short Run', seconds: 90 },
+        { key: 'shortWalk', type: 'walk', label: 'Short Walk', seconds: 90 },
+        { key: 'longRun', type: 'run', label: 'Long Run', seconds: 180 },
+        { key: 'recoveryWalk', type: 'walk', label: 'Long Recovery Walk', seconds: 180 }
+      ]});
+      if (week === 4) return wrap({ kind: 'ladder', count: 2, countLabel: 'Ladder sets', patternName: 'Short + Long Ladder', patternHelp: 'Each set is Short Run → Short Walk → Long Run. A long recovery separates sets.', groups: [
+        { key: 'shortRun', type: 'run', label: 'Short Run', seconds: 180 },
+        { key: 'shortWalk', type: 'walk', label: 'Short Walk', seconds: 90 },
+        { key: 'longRun', type: 'run', label: 'Long Run', seconds: 300 },
+        { key: 'recoveryWalk', type: 'walk', label: 'Long Recovery Walk', seconds: 150 }
+      ]});
+      if (week === 5 && day === 1) return wrap({ kind: 'simple', count: 3, countLabel: 'Run intervals', patternName: 'Run/Walk Pattern', patternHelp: 'A Walk follows every Run except the final Run.', groups: [
+        { key: 'run', type: 'run', label: 'Run', seconds: 300 }, { key: 'walk', type: 'walk', label: 'Walk', seconds: 180 }
+      ]});
+      if (week === 5 && day === 2) return wrap({ kind: 'simple', count: 2, countLabel: 'Run intervals', patternName: 'Run/Walk Pattern', patternHelp: 'A Walk follows every Run except the final Run.', groups: [
+        { key: 'run', type: 'run', label: 'Run', seconds: 480 }, { key: 'walk', type: 'walk', label: 'Walk', seconds: 300 }
+      ]});
+      if (week === 6 && day === 1) return wrap({ kind: 'sequence', count: null, patternName: '5–8–5 Sequence', patternHelp: 'Run 5 → Walk 3 → Run 8 → Walk 3 → Run 5.', groups: [
+        { key: 'shortRun', type: 'run', label: 'Short Run', seconds: 300 },
+        { key: 'walk', type: 'walk', label: 'Walk', seconds: 180 },
+        { key: 'longRun', type: 'run', label: 'Long Run', seconds: 480 }
+      ]});
+      if (week === 6 && day === 2) return wrap({ kind: 'simple', count: 2, countLabel: 'Run intervals', patternName: 'Run/Walk Pattern', patternHelp: 'A Walk follows every Run except the final Run.', groups: [
+        { key: 'run', type: 'run', label: 'Run', seconds: 600 }, { key: 'walk', type: 'walk', label: 'Walk', seconds: 180 }
+      ]});
+
+      const continuousSeconds = week === 5 ? 1200 : week === 6 ? 1500 : week === 7 ? 1500 : week === 8 ? 1680 : 1800;
+      return wrap({ kind: 'continuous', count: null, patternName: 'Continuous Run', patternHelp: 'One continuous run between the warm-up and cool-down.', groups: [
+        { key: 'run', type: 'run', label: 'Run', seconds: continuousSeconds }
+      ]});
+    }
+
+    function buildFromEditConfig(config) {
+      const group = key => {
+        const definition = config.schema.groups.find(item => item.key === key);
+        return { type: definition.type, name: typeNames[definition.type], seconds: config.values[key], editKey: key };
+      };
+      const built = [group('warm')];
+      if (config.schema.kind === 'simple') {
+        for (let i = 0; i < config.count; i++) {
+          built.push(group('run'));
+          if (i < config.count - 1) built.push(group('walk'));
+        }
+      } else if (config.schema.kind === 'ladder') {
+        for (let i = 0; i < config.count; i++) {
+          built.push(group('shortRun'), group('shortWalk'), group('longRun'));
+          if (i < config.count - 1) built.push(group('recoveryWalk'));
+        }
+      } else if (config.schema.kind === 'sequence') {
+        built.push(group('shortRun'), group('walk'), group('longRun'), group('walk'), group('shortRun'));
+      } else {
+        built.push(group('run'));
+      }
+      built.push(group('cool'));
+      return built;
+    }
+
     const colors = { warm: '#eeeeef', walk: '#ffffff', run: '#ff2638', cool: '#9b9ba1' };
     const typeNames = { warm: 'Warm-up Walk', walk: 'Walk', run: 'Run', cool: 'Cool-down Walk' };
     const els = Object.fromEntries([
@@ -450,14 +540,16 @@
       'sessionTitle','sessionSummary','overallTime','progressFill','intervals','resetButton','soundButton','fullscreenButton',
       'wakeButton','toast','infoButton','infoDialog','closeInfo','customButton','customDialog','customWarm','customCool',
       'customRun','customWalk','customRounds','customSummary','cancelCustom','applyCustom','editButton','editDialog',
-      'editRows','addIntervalButton','cancelEdit','applyEdit','restorePresetButton'
+      'editRows','cancelEdit','applyEdit','restorePresetButton','patternCard','patternName','patternHelp','patternCount',
+      'patternCountLabel','fixedPatternNote'
     ].map(id => [id, document.getElementById(id)]));
 
     let selectedWeek = Number(localStorage.getItem('c25k-week')) || 1;
     let selectedDay = Number(localStorage.getItem('c25k-day')) || 1;
     let intervals = PLANS[selectedWeek][selectedDay - 1].map(item => ({...item}));
     let sessionLabel = null;
-    let editorIntervals = [];
+    let editorConfig = null;
+    let activeEditConfig = null;
     let currentIndex = 0;
     let remainingMs = intervals[0].seconds * 1000;
     let running = false;
@@ -502,6 +594,7 @@
       localStorage.setItem('c25k-day', selectedDay);
       intervals = PLANS[selectedWeek][selectedDay - 1].map(item => ({...item}));
       sessionLabel = null;
+      activeEditConfig = null;
       currentIndex = 0;
       remainingMs = intervals[0].seconds * 1000;
       lastCountdownSecond = null;
@@ -721,6 +814,7 @@
       pause();
       intervals = built;
       sessionLabel = 'Custom Workout';
+      activeEditConfig = null;
       currentIndex = 0;
       remainingMs = intervals[0].seconds * 1000;
       lastCountdownSecond = null;
@@ -732,50 +826,80 @@
     }
 
     function openIntervalEditor() {
+      if (sessionLabel?.startsWith('Custom Workout')) {
+        openCustomBuilder();
+        return;
+      }
       pause();
-      editorIntervals = intervals.map(item => ({...item}));
+      const schema = getPresetEditSchema(selectedWeek, selectedDay);
+      if (activeEditConfig && activeEditConfig.week === selectedWeek && activeEditConfig.day === selectedDay) {
+        editorConfig = {
+          schema,
+          count: activeEditConfig.count,
+          values: {...activeEditConfig.values}
+        };
+      } else {
+        editorConfig = {
+          schema,
+          count: schema.count,
+          values: Object.fromEntries(schema.groups.map(group => [group.key, group.seconds]))
+        };
+      }
       renderEditor();
       els.editDialog.showModal();
     }
 
     function renderEditor() {
-      const options = Object.entries(typeNames).map(([type, name]) => `<option value="${type}">${name}</option>`).join('');
-      els.editRows.innerHTML = editorIntervals.map((item, index) => `
-        <div class="edit-row" data-index="${index}">
-          <select class="edit-type" aria-label="Activity for interval ${index + 1}">${options}</select>
-          <button class="step-button" data-action="minus" aria-label="Subtract 15 seconds">−15s</button>
-          <input class="edit-time" type="text" inputmode="numeric" value="${shortTime(item.seconds)}" aria-label="Time for interval ${index + 1}">
-          <button class="step-button" data-action="plus" aria-label="Add 15 seconds">+15s</button>
-          <button class="row-button" data-action="duplicate" aria-label="Duplicate interval">＋</button>
-          <button class="row-button delete" data-action="delete" aria-label="Delete interval">×</button>
+      const editableCount = Number.isFinite(editorConfig.schema.count);
+      els.patternCard.hidden = !editableCount;
+      els.fixedPatternNote.hidden = editableCount;
+      els.patternName.textContent = editorConfig.schema.patternName;
+      els.patternHelp.textContent = editorConfig.schema.patternHelp;
+      els.patternCountLabel.textContent = editorConfig.schema.countLabel || 'Pattern repeats';
+      if (editableCount) els.patternCount.value = editorConfig.count;
+
+      const preview = buildFromEditConfig(editorConfig);
+      const occurrences = preview.reduce((counts, item) => {
+        counts[item.editKey] = (counts[item.editKey] || 0) + 1;
+        return counts;
+      }, {});
+      els.editRows.innerHTML = editorConfig.schema.groups.map(group => `
+        <div class="group-row" data-key="${group.key}" style="--group-color:${colors[group.type]}">
+          <span class="group-dot"></span>
+          <span class="group-label"><strong>${group.label}</strong><small>Updates ${occurrences[group.key]} matching step${occurrences[group.key] === 1 ? '' : 's'}</small></span>
+          <button class="step-button" data-action="minus" aria-label="Subtract 15 seconds from ${group.label}">−15s</button>
+          <input class="group-time" type="text" inputmode="numeric" value="${shortTime(editorConfig.values[group.key])}" aria-label="Duration for ${group.label}">
+          <button class="step-button" data-action="plus" aria-label="Add 15 seconds to ${group.label}">+15s</button>
         </div>`).join('');
-      [...els.editRows.querySelectorAll('.edit-row')].forEach((row, index) => {
-        row.querySelector('.edit-type').value = editorIntervals[index].type;
-      });
     }
 
     function updateEditorTime(row, seconds) {
-      const index = Number(row.dataset.index);
-      editorIntervals[index].seconds = Math.max(5, Math.min(7200, seconds));
-      row.querySelector('.edit-time').value = shortTime(editorIntervals[index].seconds);
+      const key = row.dataset.key;
+      editorConfig.values[key] = Math.max(5, Math.min(7200, seconds));
+      row.querySelector('.group-time').value = shortTime(editorConfig.values[key]);
     }
 
     function applyEditedWorkout() {
-      const rows = [...els.editRows.querySelectorAll('.edit-row')];
-      const updated = [];
+      const rows = [...els.editRows.querySelectorAll('.group-row')];
       for (const row of rows) {
-        const type = row.querySelector('.edit-type').value;
-        const seconds = parseTime(row.querySelector('.edit-time').value);
+        const seconds = parseTime(row.querySelector('.group-time').value);
         if (!Number.isFinite(seconds) || seconds < 5 || seconds > 7200) {
-          showToast('Each interval must be between 0:05 and 120:00');
+          showToast('Each timing group must be between 0:05 and 120:00');
           return;
         }
-        updated.push({ type, name: typeNames[type], seconds });
+        editorConfig.values[row.dataset.key] = seconds;
       }
-      if (!updated.length) { showToast('Add at least one interval'); return; }
+      if (Number.isFinite(editorConfig.schema.count)) {
+        editorConfig.count = Math.round(Number(els.patternCount.value));
+        if (!Number.isFinite(editorConfig.count) || editorConfig.count < 1 || editorConfig.count > 20) {
+          showToast('Choose between 1 and 20 pattern repeats');
+          return;
+        }
+      }
 
-      intervals = updated;
-      sessionLabel = sessionLabel?.startsWith('Custom Workout') ? 'Custom Workout · Edited' : `Adjusted · Week ${selectedWeek} Run ${selectedDay}`;
+      intervals = buildFromEditConfig(editorConfig).map(({editKey, ...item}) => item);
+      activeEditConfig = { week: selectedWeek, day: selectedDay, count: editorConfig.count, values: {...editorConfig.values} };
+      sessionLabel = `Adjusted · Week ${selectedWeek} Run ${selectedDay}`;
       currentIndex = 0;
       remainingMs = intervals[0].seconds * 1000;
       lastCountdownSecond = null;
@@ -868,42 +992,30 @@
     els.editButton.addEventListener('click', openIntervalEditor);
     els.cancelEdit.addEventListener('click', () => els.editDialog.close());
     els.applyEdit.addEventListener('click', applyEditedWorkout);
-    els.addIntervalButton.addEventListener('click', () => {
-      const insertAt = editorIntervals.at(-1)?.type === 'cool' ? editorIntervals.length - 1 : editorIntervals.length;
-      editorIntervals.splice(insertAt, 0, { type: 'walk', name: typeNames.walk, seconds: 60 });
-      renderEditor();
-      els.editRows.children[insertAt]?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    });
     els.editRows.addEventListener('click', event => {
       const button = event.target.closest('button[data-action]');
       if (!button) return;
-      const row = button.closest('.edit-row');
-      const index = Number(row.dataset.index);
+      const row = button.closest('.group-row');
+      const key = row.dataset.key;
       const action = button.dataset.action;
-      if (action === 'minus') updateEditorTime(row, editorIntervals[index].seconds - 15);
-      else if (action === 'plus') updateEditorTime(row, editorIntervals[index].seconds + 15);
-      else if (action === 'duplicate') {
-        editorIntervals.splice(index + 1, 0, {...editorIntervals[index]});
-        renderEditor();
-      } else if (action === 'delete') {
-        if (editorIntervals.length === 1) { showToast('A workout needs at least one interval'); return; }
-        editorIntervals.splice(index, 1);
-        renderEditor();
-      }
+      if (action === 'minus') updateEditorTime(row, editorConfig.values[key] - 15);
+      else if (action === 'plus') updateEditorTime(row, editorConfig.values[key] + 15);
     });
     els.editRows.addEventListener('change', event => {
-      const row = event.target.closest('.edit-row');
-      if (!row) return;
-      const index = Number(row.dataset.index);
-      if (event.target.classList.contains('edit-type')) {
-        editorIntervals[index].type = event.target.value;
-        editorIntervals[index].name = typeNames[event.target.value];
-      } else if (event.target.classList.contains('edit-time')) {
+      const row = event.target.closest('.group-row');
+      if (row && event.target.classList.contains('group-time')) {
         const seconds = parseTime(event.target.value);
         if (!Number.isFinite(seconds)) {
-          event.target.value = shortTime(editorIntervals[index].seconds);
+          event.target.value = shortTime(editorConfig.values[row.dataset.key]);
           showToast('Use a time like 1:30');
         } else updateEditorTime(row, seconds);
+      }
+    });
+    els.patternCount.addEventListener('change', () => {
+      const count = Math.round(Number(els.patternCount.value));
+      if (Number.isFinite(count)) {
+        editorConfig.count = Math.max(1, Math.min(20, count));
+        renderEditor();
       }
     });
     els.infoButton.addEventListener('click', () => els.infoDialog.showModal());
