@@ -3,22 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#07111f">
+  <meta name="theme-color" content="#050505">
   <title>Couch to 5K Classroom Timer</title>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #07111f;
-      --panel: #0f1d2e;
-      --panel-2: #13243a;
-      --text: #f7fbff;
-      --muted: #aabbd0;
-      --line: #29405a;
-      --walk: #28d6a2;
-      --run: #ffbb3e;
-      --warm: #57a8ff;
-      --cool: #b888ff;
-      --danger: #ff667a;
+      --bg: #050505;
+      --panel: #101011;
+      --panel-2: #1b1b1d;
+      --text: #ffffff;
+      --muted: #b8b8bd;
+      --line: #3a3a3e;
+      --walk: #ffffff;
+      --run: #ff2638;
+      --warm: #eeeeef;
+      --cool: #9b9ba1;
+      --danger: #ff2638;
       --accent: var(--warm);
       --shadow: 0 24px 70px rgba(0,0,0,.3);
     }
@@ -29,8 +29,8 @@
       margin: 0;
       overflow: hidden;
       background:
-        radial-gradient(circle at 10% 0%, rgba(87,168,255,.13), transparent 34%),
-        radial-gradient(circle at 100% 100%, rgba(40,214,162,.09), transparent 32%),
+        radial-gradient(circle at 8% 0%, rgba(255,38,56,.2), transparent 35%),
+        radial-gradient(circle at 100% 100%, rgba(255,255,255,.07), transparent 30%),
         var(--bg);
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -60,18 +60,18 @@
     .logo {
       width: 48px; height: 48px; border-radius: 15px;
       display: grid; place-items: center;
-      background: linear-gradient(135deg, var(--walk), var(--warm));
-      color: #06101d; font-weight: 1000; font-size: 20px;
-      box-shadow: 0 10px 30px rgba(40,214,162,.2);
+      background: var(--run);
+      color: #050505; font-weight: 1000; font-size: 20px;
+      box-shadow: 0 10px 30px rgba(255,38,56,.24);
     }
     .brand h1 { margin: 0; font-size: clamp(20px, 2vw, 32px); letter-spacing: -.035em; }
     .brand p { margin: 2px 0 0; color: var(--muted); font-size: clamp(12px, 1vw, 16px); }
 
-    .selectors { display: flex; gap: 12px; align-items: center; }
+    .selectors { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
     .select-wrap {
       display: grid; grid-template-columns: auto auto; align-items: center; gap: 9px;
       padding: 7px 10px 7px 14px; border: 1px solid var(--line); border-radius: 14px;
-      background: rgba(15,29,46,.82);
+      background: rgba(16,16,17,.9);
     }
     .select-wrap label { color: var(--muted); font-size: 14px; font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
     select {
@@ -80,14 +80,19 @@
       cursor: pointer;
     }
 
-    .icon-button, .small-button, .control-button {
+    .icon-button, .small-button, .control-button, .custom-button, .dialog-button {
       border: 1px solid var(--line); color: var(--text); background: var(--panel-2);
       cursor: pointer; transition: transform .12s ease, background .12s ease, border-color .12s ease;
     }
-    button:hover { border-color: #4a6989; }
+    button:hover { border-color: #77777d; }
     button:active { transform: scale(.97); }
-    button:focus-visible, select:focus-visible { outline: 4px solid rgba(87,168,255,.45); outline-offset: 3px; }
+    button:focus-visible, select:focus-visible, input:focus-visible { outline: 4px solid rgba(255,38,56,.42); outline-offset: 3px; }
     .icon-button { width: 58px; height: 58px; border-radius: 16px; font-size: 25px; }
+    .custom-button {
+      min-height: 58px; padding: 0 20px; border: 0; border-radius: 16px;
+      background: var(--run); color: #080808; font-weight: 950; font-size: 17px;
+      box-shadow: 0 10px 28px rgba(255,38,56,.22);
+    }
 
     main {
       min-height: 0;
@@ -100,7 +105,7 @@
       min-height: 0;
       border: 1px solid var(--line);
       border-radius: clamp(20px, 2.2vw, 34px);
-      background: linear-gradient(155deg, rgba(19,36,58,.96), rgba(11,23,38,.96));
+      background: linear-gradient(155deg, rgba(25,25,27,.98), rgba(10,10,11,.98));
       box-shadow: var(--shadow);
     }
 
@@ -135,7 +140,7 @@
     .next-strip {
       display: flex; align-items: center; justify-content: center; gap: 12px;
       min-height: 54px; margin-bottom: 20px; padding: 10px 16px;
-      color: var(--muted); background: rgba(5,14,25,.42); border: 1px solid var(--line); border-radius: 14px;
+      color: var(--muted); background: rgba(0,0,0,.48); border: 1px solid var(--line); border-radius: 14px;
       font-size: clamp(16px, 1.5vw, 23px); font-weight: 750;
     }
     .next-strip strong { color: var(--text); }
@@ -144,22 +149,25 @@
     .control-button { min-height: clamp(70px, 8.2vh, 94px); border-radius: 20px; font-weight: 900; font-size: clamp(18px, 1.7vw, 25px); }
     .control-button.skip { font-size: 32px; }
     .control-button.primary {
-      border: 0; background: var(--accent); color: #06101c;
+      border: 0; background: var(--accent); color: #050505;
       box-shadow: 0 12px 35px color-mix(in srgb, var(--accent) 28%, transparent);
     }
 
     .plan-card { display: grid; grid-template-rows: auto auto 1fr auto; padding: clamp(18px, 2vw, 28px); overflow: hidden; }
     .plan-title { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+    .plan-actions { display: flex; gap: 8px; }
     .plan-title h2 { margin: 0; font-size: clamp(23px, 2.25vw, 34px); letter-spacing: -.04em; }
     .plan-title p { margin: 4px 0 0; color: var(--muted); font-weight: 700; }
     .small-button { min-width: 55px; height: 48px; padding: 0 14px; border-radius: 13px; font-size: 21px; }
+    .plan-actions .small-button { font-size: 14px; font-weight: 850; }
+    [hidden] { display: none !important; }
 
     .overall { margin: 20px 0 14px; }
     .overall-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
-    .progress-track { height: 13px; margin-top: 9px; background: #071321; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+    .progress-track { height: 13px; margin-top: 9px; background: #020202; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
     .progress-fill { width: 0%; height: 100%; background: var(--accent); border-radius: inherit; transition: width .25s linear, background .25s; }
 
-    .intervals { min-height: 0; overflow: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: #42617f transparent; }
+    .intervals { min-height: 0; overflow: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: #666 transparent; }
     .interval {
       display: grid; grid-template-columns: 13px minmax(0,1fr) auto; align-items: center; gap: 12px;
       min-height: 58px; padding: 8px 12px; margin-bottom: 7px; border-radius: 13px;
@@ -173,29 +181,64 @@
     .interval.done { opacity: .43; }
     .interval.done .interval-name { text-decoration: line-through; }
 
-    .footer-tools { display: flex; gap: 10px; margin-top: 12px; }
-    .footer-tools .small-button { flex: 1; font-size: 15px; font-weight: 800; }
-    .footer-tools .danger { color: #ff9caa; }
+    .footer-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 12px; }
+    .footer-tools .small-button { min-width: 0; font-size: 14px; font-weight: 850; }
+    .footer-tools .danger { color: #ff7380; }
+    .footer-tools .edit { border-color: #6d6d73; color: white; }
 
     .toast {
       position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 30px);
-      padding: 13px 19px; border-radius: 13px; background: #f7fbff; color: #07111f;
+      padding: 13px 19px; border-radius: 13px; background: #ffffff; color: #050505;
       font-weight: 850; opacity: 0; pointer-events: none; transition: .22s ease; z-index: 20;
       box-shadow: 0 15px 45px rgba(0,0,0,.35);
     }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
     dialog {
-      width: min(720px, calc(100% - 32px)); max-height: 88vh; overflow: auto;
+      width: min(760px, calc(100% - 32px)); max-height: 90vh; overflow: auto;
       border: 1px solid var(--line); border-radius: 24px; padding: 28px;
       background: var(--panel); color: var(--text); box-shadow: var(--shadow);
     }
-    dialog::backdrop { background: rgba(1,7,14,.77); backdrop-filter: blur(8px); }
+    dialog::backdrop { background: rgba(0,0,0,.82); backdrop-filter: blur(8px); }
     dialog h2 { font-size: 30px; margin: 0 0 10px; }
     dialog p, dialog li { color: var(--muted); line-height: 1.55; }
-    .dialog-actions { display: flex; justify-content: flex-end; margin-top: 20px; }
-    .dialog-actions button { min-height: 52px; padding: 0 24px; border-radius: 13px; font-weight: 850; }
-    kbd { padding: 3px 7px; border: 1px solid #526a82; border-bottom-width: 3px; border-radius: 6px; background: #15263a; color: white; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .dialog-actions button { min-height: 54px; padding: 0 24px; border-radius: 13px; font-weight: 900; }
+    .dialog-actions .apply { border: 0; background: var(--run); color: #050505; }
+    kbd { padding: 3px 7px; border: 1px solid #666; border-bottom-width: 3px; border-radius: 6px; background: #202022; color: white; }
+
+    .builder-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px;
+      margin-top: 22px;
+    }
+    .field { display: grid; gap: 7px; }
+    .field label { color: var(--muted); font-size: 13px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .field input, .field select, .edit-time, .edit-type {
+      width: 100%; min-height: 54px; padding: 0 14px; border: 1px solid var(--line); border-radius: 12px;
+      background: #080809; color: white; font-size: 20px; font-weight: 850;
+    }
+    .builder-summary {
+      margin-top: 18px; padding: 15px 17px; border-radius: 13px;
+      background: rgba(255,38,56,.1); border: 1px solid rgba(255,38,56,.35);
+      color: white; font-weight: 800;
+    }
+    .hint { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+
+    #editDialog { width: min(900px, calc(100% - 32px)); }
+    .edit-list { display: grid; gap: 8px; max-height: 52vh; overflow: auto; padding: 4px 4px 4px 0; }
+    .edit-row {
+      display: grid; grid-template-columns: minmax(145px,1fr) 78px minmax(85px,.65fr) 78px 58px 58px;
+      align-items: center; gap: 8px; padding: 9px; border: 1px solid var(--line); border-radius: 13px; background: #0a0a0b;
+    }
+    .edit-type { min-height: 48px; font-size: 16px; }
+    .edit-time { min-height: 48px; text-align: center; font-variant-numeric: tabular-nums; font-size: 18px; }
+    .step-button, .row-button {
+      min-height: 48px; border: 1px solid var(--line); border-radius: 11px; background: #202022; color: white;
+      font-weight: 900; cursor: pointer;
+    }
+    .row-button { font-size: 22px; }
+    .row-button.delete { color: #ff6977; }
+    .add-interval { width: 100%; min-height: 52px; margin-top: 10px; border: 1px dashed #777; border-radius: 12px; background: transparent; color: white; font-weight: 850; cursor: pointer; }
 
     .countdown-flash { animation: flash .38s ease; }
     @keyframes flash { 45% { filter: brightness(1.35); } }
@@ -210,6 +253,13 @@
       main { grid-template-columns: 1fr; }
       .timer-card { min-height: 620px; }
       .plan-card { min-height: 540px; }
+      .builder-grid { grid-template-columns: 1fr; }
+      .edit-row { grid-template-columns: 1fr 65px 82px 65px 52px 52px; }
+    }
+
+    @media (max-width: 600px) {
+      .edit-row { grid-template-columns: 1fr 1fr 1fr; }
+      .edit-type, .edit-time { grid-column: span 3; }
     }
 
     @media (max-height: 720px) and (min-width: 861px) {
@@ -247,6 +297,7 @@
           <label for="day">Run</label>
           <select id="day" aria-label="Choose run"></select>
         </div>
+        <button id="customButton" class="custom-button">＋ Custom Workout</button>
         <button id="soundButton" class="icon-button" aria-label="Mute spoken cues" title="Spoken cues on">🔊</button>
         <button id="fullscreenButton" class="icon-button" aria-label="Enter full screen" title="Full screen">⛶</button>
       </div>
@@ -279,7 +330,10 @@
             <h2 id="sessionTitle">Week 1 · Run 1</h2>
             <p id="sessionSummary">28:30 total · 8 run intervals</p>
           </div>
-          <button id="infoButton" class="small-button" aria-label="Help and safety information" title="Help">?</button>
+          <div class="plan-actions">
+            <button id="restorePresetButton" class="small-button" hidden>↩ Preset</button>
+            <button id="infoButton" class="small-button" aria-label="Help and safety information" title="Help">?</button>
+          </div>
         </div>
 
         <div class="overall">
@@ -291,6 +345,7 @@
 
         <div class="footer-tools">
           <button id="resetButton" class="small-button danger">↺ Reset session</button>
+          <button id="editButton" class="small-button edit">✎ Edit intervals</button>
           <button id="wakeButton" class="small-button">☀ Keep screen awake</button>
         </div>
       </aside>
@@ -308,9 +363,55 @@
       <li><kbd>F</kbd> enter full screen</li>
       <li><kbd>M</kbd> mute or unmute cues</li>
       <li><kbd>R</kbd> reset the session</li>
+      <li><kbd>C</kbd> build a custom workout</li>
     </ul>
+    <p>Use <strong>Edit intervals</strong> to adjust the workout currently on screen. Choosing a Week or Run again restores the original Couch-to-5K preset.</p>
     <p>The plan uses a 5-minute warm-up walk and 5-minute cool-down walk. Run means an easy, sustainable pace—not a sprint. Take a rest day between sessions, adapt for individual needs, and stop if something does not feel right.</p>
     <div class="dialog-actions"><button id="closeInfo" class="control-button primary">Got it</button></div>
+  </dialog>
+
+  <dialog id="customDialog">
+    <h2>Build a Custom Workout</h2>
+    <p>Set one run/walk pattern and the timer will build the entire workout. Use times like <strong>1:30</strong> for 1 minute, 30 seconds.</p>
+    <div class="builder-grid">
+      <div class="field">
+        <label for="customWarm">Warm-up walk</label>
+        <input id="customWarm" type="text" inputmode="numeric" value="5:00" aria-describedby="timeHint">
+      </div>
+      <div class="field">
+        <label for="customCool">Cool-down walk</label>
+        <input id="customCool" type="text" inputmode="numeric" value="5:00">
+      </div>
+      <div class="field">
+        <label for="customRun">Run interval</label>
+        <input id="customRun" type="text" inputmode="numeric" value="1:00">
+      </div>
+      <div class="field">
+        <label for="customWalk">Walk interval</label>
+        <input id="customWalk" type="text" inputmode="numeric" value="1:30">
+      </div>
+      <div class="field">
+        <label for="customRounds">Number of run intervals</label>
+        <input id="customRounds" type="number" inputmode="numeric" min="1" max="50" value="8">
+      </div>
+    </div>
+    <p id="timeHint" class="hint">The final run is followed directly by the cool-down, without an extra walk interval.</p>
+    <div id="customSummary" class="builder-summary">8 run intervals · 28:30 total</div>
+    <div class="dialog-actions">
+      <button id="cancelCustom" class="dialog-button">Cancel</button>
+      <button id="applyCustom" class="dialog-button apply">Use this workout</button>
+    </div>
+  </dialog>
+
+  <dialog id="editDialog">
+    <h2>Edit This Workout</h2>
+    <p>Change any interval by 15 seconds, type an exact time, duplicate it, or remove it. Your original Couch-to-5K preset stays available in the Week and Run menus.</p>
+    <div id="editRows" class="edit-list"></div>
+    <button id="addIntervalButton" class="add-interval">＋ Add an interval</button>
+    <div class="dialog-actions">
+      <button id="cancelEdit" class="dialog-button">Cancel</button>
+      <button id="applyEdit" class="dialog-button apply">Apply changes</button>
+    </div>
   </dialog>
 
   <script>
@@ -342,16 +443,21 @@
       9: [1,2,3].map(() => session([run(1800)]))
     };
 
-    const colors = { warm: '#57a8ff', walk: '#28d6a2', run: '#ffbb3e', cool: '#b888ff' };
+    const colors = { warm: '#eeeeef', walk: '#ffffff', run: '#ff2638', cool: '#9b9ba1' };
+    const typeNames = { warm: 'Warm-up Walk', walk: 'Walk', run: 'Run', cool: 'Cool-down Walk' };
     const els = Object.fromEntries([
       'week','day','timerCard','activityName','intervalCount','clock','nextStrip','startButton','previousButton','nextButton',
       'sessionTitle','sessionSummary','overallTime','progressFill','intervals','resetButton','soundButton','fullscreenButton',
-      'wakeButton','toast','infoButton','infoDialog','closeInfo'
+      'wakeButton','toast','infoButton','infoDialog','closeInfo','customButton','customDialog','customWarm','customCool',
+      'customRun','customWalk','customRounds','customSummary','cancelCustom','applyCustom','editButton','editDialog',
+      'editRows','addIntervalButton','cancelEdit','applyEdit','restorePresetButton'
     ].map(id => [id, document.getElementById(id)]));
 
     let selectedWeek = Number(localStorage.getItem('c25k-week')) || 1;
     let selectedDay = Number(localStorage.getItem('c25k-day')) || 1;
-    let intervals = PLANS[selectedWeek][selectedDay - 1];
+    let intervals = PLANS[selectedWeek][selectedDay - 1].map(item => ({...item}));
+    let sessionLabel = null;
+    let editorIntervals = [];
     let currentIndex = 0;
     let remainingMs = intervals[0].seconds * 1000;
     let running = false;
@@ -394,7 +500,8 @@
       selectedDay = Number(els.day.value);
       localStorage.setItem('c25k-week', selectedWeek);
       localStorage.setItem('c25k-day', selectedDay);
-      intervals = PLANS[selectedWeek][selectedDay - 1];
+      intervals = PLANS[selectedWeek][selectedDay - 1].map(item => ({...item}));
+      sessionLabel = null;
       currentIndex = 0;
       remainingMs = intervals[0].seconds * 1000;
       lastCountdownSecond = null;
@@ -403,7 +510,8 @@
     }
 
     function renderPlan() {
-      els.sessionTitle.textContent = `Week ${selectedWeek} · Run ${selectedDay}`;
+      els.sessionTitle.textContent = sessionLabel || `Week ${selectedWeek} · Run ${selectedDay}`;
+      els.restorePresetButton.hidden = !sessionLabel;
       const runCount = intervals.filter(x => x.type === 'run').length;
       els.sessionSummary.textContent = `${shortTime(totalSeconds())} total · ${runCount} run interval${runCount === 1 ? '' : 's'}`;
       els.intervals.innerHTML = intervals.map((item, index) => `
@@ -537,6 +645,146 @@
       showToast('Session reset');
     }
 
+    function parseTime(value) {
+      const clean = String(value).trim();
+      if (!clean) return NaN;
+      if (clean.includes(':')) {
+        const parts = clean.split(':');
+        if (parts.length !== 2) return NaN;
+        const minutes = Number(parts[0]);
+        const seconds = Number(parts[1]);
+        if (!Number.isFinite(minutes) || !Number.isFinite(seconds) || minutes < 0 || seconds < 0 || seconds >= 60) return NaN;
+        return Math.round(minutes * 60 + seconds);
+      }
+      const minutes = Number(clean);
+      return Number.isFinite(minutes) && minutes >= 0 ? Math.round(minutes * 60) : NaN;
+    }
+
+    function getCustomSettings() {
+      return {
+        warm: parseTime(els.customWarm.value),
+        cool: parseTime(els.customCool.value),
+        run: parseTime(els.customRun.value),
+        walk: parseTime(els.customWalk.value),
+        rounds: Math.round(Number(els.customRounds.value))
+      };
+    }
+
+    function setCustomSettings(settings) {
+      els.customWarm.value = shortTime(settings.warm);
+      els.customCool.value = shortTime(settings.cool);
+      els.customRun.value = shortTime(settings.run);
+      els.customWalk.value = shortTime(settings.walk);
+      els.customRounds.value = settings.rounds;
+      updateCustomSummary();
+    }
+
+    function openCustomBuilder() {
+      const defaults = { warm: 300, cool: 300, run: 60, walk: 90, rounds: 8 };
+      let settings = defaults;
+      try {
+        const saved = JSON.parse(localStorage.getItem('c25k-custom-settings'));
+        if (saved && Number.isFinite(saved.run) && Number.isFinite(saved.rounds)) settings = {...defaults, ...saved};
+      } catch {}
+      setCustomSettings(settings);
+      els.customDialog.showModal();
+    }
+
+    function updateCustomSummary() {
+      const settings = getCustomSettings();
+      const valid = Number.isFinite(settings.warm) && Number.isFinite(settings.cool) && Number.isFinite(settings.run) &&
+        Number.isFinite(settings.walk) && settings.run > 0 && settings.rounds >= 1 && settings.rounds <= 50;
+      if (!valid) {
+        els.customSummary.textContent = 'Enter valid times and 1–50 run intervals.';
+        return;
+      }
+      const total = settings.warm + settings.cool + settings.run * settings.rounds + settings.walk * Math.max(0, settings.rounds - 1);
+      els.customSummary.textContent = `${settings.rounds} run interval${settings.rounds === 1 ? '' : 's'} · ${shortTime(total)} total`;
+    }
+
+    function applyCustomWorkout() {
+      const settings = getCustomSettings();
+      const valid = Number.isFinite(settings.warm) && Number.isFinite(settings.cool) && Number.isFinite(settings.run) &&
+        Number.isFinite(settings.walk) && settings.run > 0 && settings.run <= 7200 && settings.walk >= 0 &&
+        settings.walk <= 7200 && settings.warm >= 0 && settings.warm <= 7200 && settings.cool >= 0 &&
+        settings.cool <= 7200 && settings.rounds >= 1 && settings.rounds <= 50;
+      if (!valid) { showToast('Check the workout times and number of intervals'); return; }
+
+      const built = [];
+      if (settings.warm > 0) built.push({ type: 'warm', name: typeNames.warm, seconds: settings.warm });
+      for (let i = 0; i < settings.rounds; i++) {
+        built.push({ type: 'run', name: typeNames.run, seconds: settings.run });
+        if (i < settings.rounds - 1 && settings.walk > 0) built.push({ type: 'walk', name: typeNames.walk, seconds: settings.walk });
+      }
+      if (settings.cool > 0) built.push({ type: 'cool', name: typeNames.cool, seconds: settings.cool });
+
+      pause();
+      intervals = built;
+      sessionLabel = 'Custom Workout';
+      currentIndex = 0;
+      remainingMs = intervals[0].seconds * 1000;
+      lastCountdownSecond = null;
+      localStorage.setItem('c25k-custom-settings', JSON.stringify(settings));
+      els.customDialog.close();
+      renderPlan();
+      updateDisplay();
+      showToast('Custom workout ready');
+    }
+
+    function openIntervalEditor() {
+      pause();
+      editorIntervals = intervals.map(item => ({...item}));
+      renderEditor();
+      els.editDialog.showModal();
+    }
+
+    function renderEditor() {
+      const options = Object.entries(typeNames).map(([type, name]) => `<option value="${type}">${name}</option>`).join('');
+      els.editRows.innerHTML = editorIntervals.map((item, index) => `
+        <div class="edit-row" data-index="${index}">
+          <select class="edit-type" aria-label="Activity for interval ${index + 1}">${options}</select>
+          <button class="step-button" data-action="minus" aria-label="Subtract 15 seconds">−15s</button>
+          <input class="edit-time" type="text" inputmode="numeric" value="${shortTime(item.seconds)}" aria-label="Time for interval ${index + 1}">
+          <button class="step-button" data-action="plus" aria-label="Add 15 seconds">+15s</button>
+          <button class="row-button" data-action="duplicate" aria-label="Duplicate interval">＋</button>
+          <button class="row-button delete" data-action="delete" aria-label="Delete interval">×</button>
+        </div>`).join('');
+      [...els.editRows.querySelectorAll('.edit-row')].forEach((row, index) => {
+        row.querySelector('.edit-type').value = editorIntervals[index].type;
+      });
+    }
+
+    function updateEditorTime(row, seconds) {
+      const index = Number(row.dataset.index);
+      editorIntervals[index].seconds = Math.max(5, Math.min(7200, seconds));
+      row.querySelector('.edit-time').value = shortTime(editorIntervals[index].seconds);
+    }
+
+    function applyEditedWorkout() {
+      const rows = [...els.editRows.querySelectorAll('.edit-row')];
+      const updated = [];
+      for (const row of rows) {
+        const type = row.querySelector('.edit-type').value;
+        const seconds = parseTime(row.querySelector('.edit-time').value);
+        if (!Number.isFinite(seconds) || seconds < 5 || seconds > 7200) {
+          showToast('Each interval must be between 0:05 and 120:00');
+          return;
+        }
+        updated.push({ type, name: typeNames[type], seconds });
+      }
+      if (!updated.length) { showToast('Add at least one interval'); return; }
+
+      intervals = updated;
+      sessionLabel = sessionLabel?.startsWith('Custom Workout') ? 'Custom Workout · Edited' : `Adjusted · Week ${selectedWeek} Run ${selectedDay}`;
+      currentIndex = 0;
+      remainingMs = intervals[0].seconds * 1000;
+      lastCountdownSecond = null;
+      els.editDialog.close();
+      renderPlan();
+      updateDisplay();
+      showToast('Workout changes applied');
+    }
+
     function initAudio() {
       if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
       if (audioContext.state === 'suspended') audioContext.resume();
@@ -610,6 +858,54 @@
     els.soundButton.addEventListener('click', toggleSound);
     els.fullscreenButton.addEventListener('click', toggleFullscreen);
     els.wakeButton.addEventListener('click', toggleWakeLock);
+    els.restorePresetButton.addEventListener('click', loadSession);
+    els.customButton.addEventListener('click', openCustomBuilder);
+    els.cancelCustom.addEventListener('click', () => els.customDialog.close());
+    els.applyCustom.addEventListener('click', applyCustomWorkout);
+    [els.customWarm, els.customCool, els.customRun, els.customWalk, els.customRounds].forEach(input => {
+      input.addEventListener('input', updateCustomSummary);
+    });
+    els.editButton.addEventListener('click', openIntervalEditor);
+    els.cancelEdit.addEventListener('click', () => els.editDialog.close());
+    els.applyEdit.addEventListener('click', applyEditedWorkout);
+    els.addIntervalButton.addEventListener('click', () => {
+      const insertAt = editorIntervals.at(-1)?.type === 'cool' ? editorIntervals.length - 1 : editorIntervals.length;
+      editorIntervals.splice(insertAt, 0, { type: 'walk', name: typeNames.walk, seconds: 60 });
+      renderEditor();
+      els.editRows.children[insertAt]?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    });
+    els.editRows.addEventListener('click', event => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      const row = button.closest('.edit-row');
+      const index = Number(row.dataset.index);
+      const action = button.dataset.action;
+      if (action === 'minus') updateEditorTime(row, editorIntervals[index].seconds - 15);
+      else if (action === 'plus') updateEditorTime(row, editorIntervals[index].seconds + 15);
+      else if (action === 'duplicate') {
+        editorIntervals.splice(index + 1, 0, {...editorIntervals[index]});
+        renderEditor();
+      } else if (action === 'delete') {
+        if (editorIntervals.length === 1) { showToast('A workout needs at least one interval'); return; }
+        editorIntervals.splice(index, 1);
+        renderEditor();
+      }
+    });
+    els.editRows.addEventListener('change', event => {
+      const row = event.target.closest('.edit-row');
+      if (!row) return;
+      const index = Number(row.dataset.index);
+      if (event.target.classList.contains('edit-type')) {
+        editorIntervals[index].type = event.target.value;
+        editorIntervals[index].name = typeNames[event.target.value];
+      } else if (event.target.classList.contains('edit-time')) {
+        const seconds = parseTime(event.target.value);
+        if (!Number.isFinite(seconds)) {
+          event.target.value = shortTime(editorIntervals[index].seconds);
+          showToast('Use a time like 1:30');
+        } else updateEditorTime(row, seconds);
+      }
+    });
     els.infoButton.addEventListener('click', () => els.infoDialog.showModal());
     els.closeInfo.addEventListener('click', () => els.infoDialog.close());
     document.addEventListener('fullscreenchange', () => { els.fullscreenButton.textContent = document.fullscreenElement ? '⛶' : '⛶'; });
@@ -627,6 +923,7 @@
       else if (key === 'f') toggleFullscreen();
       else if (key === 'm') toggleSound();
       else if (key === 'r') resetSession(true);
+      else if (key === 'c') openCustomBuilder();
     });
 
     populateSelectors();
@@ -636,4 +933,3 @@
   </script>
 </body>
 </html>
-
