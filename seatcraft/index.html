@@ -65,7 +65,7 @@
         <div class="room-tools" id="roomTools">
           <span class="label">Room:</span>
           <button class="btn" onclick="applyLayout('tables')">Tables of 4</button><button class="btn" onclick="applyLayout('rows')">Rows</button><button class="btn" onclick="applyLayout('u')">U-shape</button>
-          <span class="grow"></span><button class="btn" onclick="addDesk()">＋ Desk</button><button class="btn" onclick="clearAssignments()">Clear seats</button>
+          <span class="grow"></span><button class="btn soft" onclick="applyRoomToAllClasses()">⇉ Use room for all classes</button><button class="btn" onclick="addDesk()">＋ Desk</button><button class="btn" onclick="clearAssignments()">Clear seats</button>
         </div>
         <div class="room-wrap"><div class="board" id="board"></div></div>
       </section>
@@ -156,6 +156,8 @@
   function openStudents(){document.getElementById('studentInput').value=current().students.map(s=>s.name).join('\n');document.getElementById('studentsDialog').showModal()}
   function saveStudents(){const names=document.getElementById('studentInput').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(!names.length)return toast('Add at least one student');snapshot();const old=current().students,byName=new Map(old.map(s=>[s.name.toLowerCase(),s]));current().students=names.map((n,i)=>byName.get(n.toLowerCase())||{id:id('s'),name:n,absent:false,near:false,color:i%palette.length});const valid=new Set(current().students.map(s=>s.id));allSeats().forEach(x=>{if(x.seat.studentId&&!valid.has(x.seat.studentId))x.seat.studentId=null});closeDialog('studentsDialog');save();render()}
   function applyLayout(kind){if(!confirm('Change the room layout? Current seat positions will be replaced.'))return;snapshot();const assignments=current().students.filter(s=>!s.absent).map(s=>s.id);current().room=makeRoom(kind);allSeats().forEach((x,i)=>x.seat.studentId=assignments[i]||null);save();render()}
+  function cloneRoomLayout(room){return{layout:room.layout||'custom',teacher:{...room.teacher},door:{...room.door},tables:room.tables.map(t=>({...t,id:id('t'),seats:t.seats.map(s=>({...s,id:id('seat'),studentId:null,locked:false}))}))}}
+  function applyRoomToAllClasses(){const source=current(),targets=app.classes.filter(c=>c.id!==source.id);if(!targets.length)return toast('Add another class first');if(!confirm(`Use ${source.name}'s room layout for all ${app.classes.length} classes? Existing student assignments in other classes will be kept where possible.`))return;snapshot();targets.forEach(c=>{const valid=new Set(c.students.map(s=>s.id)),assignments=allSeats(c).map(x=>x.seat.studentId).filter(studentId=>studentId&&valid.has(studentId));c.room=cloneRoomLayout(source.room);allSeats(c).forEach((x,i)=>x.seat.studentId=assignments[i]||null)});save();render();toast(`Room applied to ${targets.length} other ${targets.length===1?'class':'classes'}`)}
   function addDesk(){snapshot();current().room.tables.push(table(50,50,10,10,[seat(4,10,92,80)],Math.floor(Math.random()*palette.length)));save();render();toast('Desk added—drag it into place')}
   function removeTable(tid){snapshot();current().room.tables=current().room.tables.filter(t=>t.id!==tid);save();render()}
   function clearAssignments(){if(!confirm('Clear all unlocked seats?'))return;snapshot();allSeats().forEach(x=>{if(!x.seat.locked)x.seat.studentId=null});save();render()}
